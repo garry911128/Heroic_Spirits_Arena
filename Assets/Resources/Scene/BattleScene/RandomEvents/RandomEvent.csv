@@ -1,0 +1,4 @@
+﻿EventName,BuffType,Value,Duration,Probability
+ATK Boost,AttackBoost,10,1,0.2
+HP Refill,HpRefill,50,1,0.2
+Critical Chance Boost,CriticalChance,15,1,0.2
