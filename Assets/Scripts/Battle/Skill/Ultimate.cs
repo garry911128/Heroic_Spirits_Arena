@@ -22,7 +22,7 @@ public class Ultimate : Skill
                 switch (skillType)
                 {
                     case SkillType.Attack:
-                        target.takeDamage(value);
+                        target.TakeDamage(value);
                         break;
                     case SkillType.Buff:
                         foreach (Buff buff in buffs)

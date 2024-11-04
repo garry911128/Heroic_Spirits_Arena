@@ -40,12 +40,17 @@ public abstract class Character
         isStunned = false;
     }
 
-    public void attack(Character target)
+    public void Attack(Character target)
     {
-        target.takeDamage(atk);
+        target.TakeDamage(atk);
     }
 
-    public void takeDamage(int damage)
+    public void Defense()
+    {
+        defendTurnsCount = 2;
+    }
+
+    public void TakeDamage(int damage)
     {
         if (defendTurnsCount > 0)
         {
@@ -57,7 +62,7 @@ public abstract class Character
         }
     }
 
-    public void heal(int value)
+    public void Heal(int value)
     {
         hp += value;
         if (hp > maxHp)

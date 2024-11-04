@@ -18,7 +18,7 @@ public class MinorSkill : Skill
                 switch (skillType)
                 {
                     case SkillType.Attack:
-                        user.attack(target);
+                        user.Attack(target);
                         break;
                     case SkillType.Buff:
                         foreach (Buff buff in buffs)

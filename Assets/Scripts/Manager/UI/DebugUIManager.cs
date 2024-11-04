@@ -59,6 +59,10 @@ public class DebugUIManager : MonoBehaviour, IGameObserver
         wins = playerWins;
     }
 
+    public void OnTurnStart(Character player, int playerNumber)
+    {
+    }
+
     void Update()
     {
         // 按下 Tab 鍵切換調試模式

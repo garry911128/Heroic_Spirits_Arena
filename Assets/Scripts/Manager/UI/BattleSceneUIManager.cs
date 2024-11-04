@@ -6,6 +6,7 @@ using System.Collections;
 public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 {
     private MapManager mapManager = new MapManager();
+    public ActionPanel actionPanel;
     public GameObject battleScreen;
     public GameObject vsImage; // "VS" UI component
     public Text scoreBoard; // the wins of each player
@@ -37,17 +38,18 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
         }
     }
 
-    public void OnPlayerWin(List<int> playerWins)
+    public void OnTurnStart(Character player, int playerNumber)
     {
-        //Debug.Log("subScriber OnPlayerWin");
-        UpdateScoreBoardUI(playerWins);
+        //Debug.Log("Battle Scene subScriber OnPlayerTurn");
+        actionPanel.ShowActionPanel(player, playerNumber);
     }
 
-    public void UpdateScoreBoardUI(List<int> playersWins)
+    public void OnPlayerWin(List<int> playerWins)
     {
+        Debug.Log("Battle Scene subScriber OnPlayerWin");
         scoreBoard.gameObject.SetActive(true);
-        scoreBoard.text = $"Player A: {playersWins[0]}:" + $"Player B: {playersWins[1]}";
-        //Debug.Log("score board in update" + scoreBoard.text);
+        scoreBoard.text = "Player A:" + playerWins[0] + ",Player B:" + playerWins[1];
+        Debug.Log("score board in update" + scoreBoard.text);
     }
 
     private void DisplayPlayersCharacterImages()
@@ -63,13 +65,8 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 
     IEnumerator ShowVSImageCoroutine()
     {
-        // 顯示 "VS" 圖案
         vsImage.SetActive(true);
-
-        // 等待3秒
         yield return new WaitForSeconds(3);
-
-        // 隱藏 "VS" 圖案
         vsImage.SetActive(false);
     }
 

@@ -3,23 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EndSceneController : MonoBehaviour, IGameObserver
+public class EndSceneController : MonoBehaviour
 {
     public Text winnerText;
     void Start()
     {
-        GameManager.instance.AddObserver(this);
         Debug.Log("EndScene Start");
     }
 
-    public void OnPlayerWin(List<int> playerWins)
+    public void UpdateWinnerUI()
     {
-        Debug.Log("EndScene OnPlayerWin");
-        UpdateWinnerUI(playerWins);
-    }
-
-    public void UpdateWinnerUI(List<int> playersWins)
-    {
+        List<int> playersWins = GameManager.instance.playersWins; 
         winnerText.text = $"  {playersWins[0]}:{playersWins[1]}\n";
         if (playersWins[0] > playersWins[1])
         {
@@ -32,16 +26,6 @@ public class EndSceneController : MonoBehaviour, IGameObserver
             winnerText.text += "Player 2 Wins!";
         }
         Debug.Log("winner text: " + winnerText.text);
-    }
-
-    public void OnPlayerStatsChanged(List<Character> players)
-    {
-
-    }
-
-    public void OnDestroy()
-    {
-        GameManager.instance.RemoveObserver(this);
     }
 
     // Update is called once per frame

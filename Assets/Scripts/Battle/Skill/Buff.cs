@@ -47,7 +47,7 @@ public class Buff
                     character.minorSkillBlock = true;
                     break;
                 case BuffType.HpRefill:
-                    character.heal(value);
+                    character.Heal(value);
                     break;
             }
         }
