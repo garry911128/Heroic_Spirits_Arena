@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MinorSkill : Skill
 {
-    public MinorSkill(string name, int cooldown, List<SkillType> skillTypes, List<Buff> buffs)
-        : base(name, cooldown, skillTypes, buffs)
+    public MinorSkill(string name, string description, int cooldown, List<SkillType> skillTypes, List<Buff> buffs)
+        : base(name, description, cooldown, skillTypes, buffs)
     {
     }
 

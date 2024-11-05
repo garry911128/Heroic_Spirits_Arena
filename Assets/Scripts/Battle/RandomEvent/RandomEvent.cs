@@ -37,7 +37,7 @@ public class RandomEvent
     {
         Buff newBuff = new Buff(name, duration, effectType, value);
         newBuff.Apply(character);
-        character.buff.Add(newBuff); // 加入角色的buff列表
+        character.buffs.Add(newBuff); // 加入角色的buff列表
     }
 
     public static List<RandomEvent> LoadEventsFromCSV(string filePath)

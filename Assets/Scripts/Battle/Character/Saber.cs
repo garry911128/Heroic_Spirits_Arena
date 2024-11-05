@@ -11,6 +11,7 @@ public class Saber : Character
             // 小招: 基本攻擊加穿透50%
             new MinorSkill(
                 name: "Armor Piercing Attack",
+                description: "Basic attack with 50% armor penetration",
                 cooldown: 3,
                 skillTypes: new List<SkillType> { SkillType.Attack },
                 buffs: new List<Buff> { new Buff("Armor Penetration", 1, BuffType.ArmorPenetration, 50) }
@@ -19,6 +20,7 @@ public class Saber : Character
         // 大招: 傷害對方40點
         new Ultimate(
             name: "Excalibur",
+            description: "Deal 40 damage to the opponent",
             cooldown: 5,
             skillTypes: new List<SkillType> { SkillType.Attack },
             buffs: new List<Buff>(),  // 大招不附帶 buff 效果

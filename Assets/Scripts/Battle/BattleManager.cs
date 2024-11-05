@@ -46,6 +46,12 @@ public class BattleManager : MonoBehaviour
             case CharacterAction.DEFENSE:
                 character.Defense();
                 break;
+            case CharacterAction.USEMINORSKILL:
+                character.ActivateSkill(0, currentDefender);
+                break;
+            case CharacterAction.USEUlTIMATE:
+                character.ActivateUltimate(currentDefender);
+                break;
             default:
                 break;
         }
@@ -67,7 +73,7 @@ public class BattleManager : MonoBehaviour
             yield return new WaitUntil(() => actionPanel.IsActionSelected);
             CharacterAction action = actionPanel.GetSelectedAction();
             PerformAction(action, currentAttacker);
-
+            currentAttacker.update();
             GameManager.instance.NotifyObserversPlayersState();
             turn++;
         }

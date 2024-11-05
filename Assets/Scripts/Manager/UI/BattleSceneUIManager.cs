@@ -34,7 +34,6 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
         for (int i = 0; i < players.Count; i++)
         {
             hpBars[i].fillAmount = (float)players[i].hp / players[i].maxHp;
-            //Debug.Log("hp bar fill amount: " + hpBars[i].fillAmount);
         }
     }
 

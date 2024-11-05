@@ -10,7 +10,8 @@ public class CharacterFactory
         Character character;
         string imagePath = "Character/" + characterType.ToString() + "/" + characterType.ToString();
         Sprite charactSprite = Resources.Load<Sprite>(imagePath);
-
+        string animationPath = "Character/" + characterType.ToString() + "/" + characterType.ToString() + "Attack";
+        Animator attackAnimation = Resources.Load<Animator>(animationPath);
         if (charactSprite == null)
         {
             Debug.LogError("Failed to load sprite at path: " + imagePath);
@@ -34,6 +35,7 @@ public class CharacterFactory
         }
         
         character.sprite = charactSprite;
+        character.animator = attackAnimation;
         return character;
     }
 }

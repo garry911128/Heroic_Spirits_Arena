@@ -32,6 +32,7 @@ public class Buff
         if (!isApplied)
         {
             isApplied = true;
+            character.buffs.Add(this);
             switch (effectType)
             {
                 case BuffType.DamageReduction:
@@ -73,14 +74,19 @@ public class Buff
                     character.minorSkillBlock = false;
                     break;
             }
+            Debug.Log($"{name}Buff從{character}消失了");
         }
     }
 
-    public void ReduceDuration()
+    public void ReduceDuration(Character character)
     {
         if (duration > 0)
         {
             duration--;
+        }
+        if (IsExpired())
+        {
+            Remove(character);
         }
     }
 

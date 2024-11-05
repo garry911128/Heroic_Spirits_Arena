@@ -10,7 +10,7 @@ public class ActionPanel : MonoBehaviour
     public Text descriptionText;
     public Text turnHintText;
     private int selectedIndex = 0;
-
+    private List<string> descriptionString;
     private CharacterAction selectedAction;
     private bool isActionSelected = false;
 
@@ -23,6 +23,7 @@ public class ActionPanel : MonoBehaviour
         }
 
         actionPanel.SetActive(false);
+        descriptionString = new List<string> { "", "", "", ""};
         UpdateButtonSelection();
     }
 
@@ -30,8 +31,9 @@ public class ActionPanel : MonoBehaviour
     {
         isActionSelected = false;
         actionPanel.SetActive(true);
+        turnHintText.text = $"Player {playerNumber+1}'s turn";
+        descriptionString = player.GetDescriptions();
         UpdateButtonSelection();
-        turnHintText.text = $"Player {playerNumber}'s turn";
     }
 
     public void HideActionPanel()
@@ -57,9 +59,13 @@ public class ActionPanel : MonoBehaviour
         {
             selectedAction = CharacterAction.DEFENSE;
         }
-        else
+        else if(button == buttons[2])
         {
-            return;
+            selectedAction= CharacterAction.USEMINORSKILL;
+        }
+        else if (button == buttons[3])
+        {
+            selectedAction= CharacterAction.USEUlTIMATE;
         }
 
         isActionSelected = true;
@@ -96,6 +102,7 @@ public class ActionPanel : MonoBehaviour
             if (i == selectedIndex) 
             { 
                 colors.normalColor = Color.yellow;
+                descriptionText.text = descriptionString[i];
             }
             else
             {
