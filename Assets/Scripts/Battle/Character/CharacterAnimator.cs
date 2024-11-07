@@ -10,52 +10,43 @@ public class CharacterAnimator : MonoBehaviour
     public Sprite[] defendSprites; // 防禦狀態的圖片序列
 
     private Sprite[] currentActionSprites; // 當前狀態的圖片序列
-    private int currentFrame = 0; // 當前幀
-    private bool isAnimating = false; // 是否正在播放動畫
 
-    // 播放動畫
-    public void PlayAnimation(Sprite[] sprites, float frameRate)
+    public void LoadSprite(Character character)
     {
-        if (isAnimating)
-            return; // 如果已經在播放動畫，則不再播放
-
-        isAnimating = true;
-        currentActionSprites = sprites;
-        currentFrame = 0;
-        StartCoroutine(PlayAnimationCoroutine(frameRate));
+        characterImage.sprite = character.idleSprites[0];
+        idleSprites = character.idleSprites;
+        attackSprites = character.attackSprites;
+        defendSprites = character.defendSprites;
+        currentActionSprites = idleSprites;
     }
 
-    private IEnumerator PlayAnimationCoroutine(float frameRate)
+    public IEnumerator PlayAnimationCoroutine(CharacterAction action)
     {
-        while (currentFrame < currentActionSprites.Length)
+        float frameDuration = 0.1f;  // 每幀持續時間，可自行調整
+
+        switch (action)
         {
-            characterImage.sprite = currentActionSprites[currentFrame];
-            currentFrame++;
-            yield return new WaitForSeconds(frameRate); // 根據幀率等待
+            case CharacterAction.ATTACK:
+                currentActionSprites = attackSprites; // 攻擊動畫
+                break;
+            case CharacterAction.DEFENSE:
+                currentActionSprites = defendSprites; // 防禦動畫
+                break;
+            case CharacterAction.IDLE:
+            default:
+                currentActionSprites = idleSprites; // 待機動畫
+                break;
         }
 
-        isAnimating = false; // 動畫播放結束
-        currentActionSprites = idleSprites;
+        for (int i = 0; i < currentActionSprites.Length; i++)
+        {
+            characterImage.sprite = currentActionSprites[i];
+            yield return new WaitForSeconds(frameDuration);
+        }
+
+        currentActionSprites = idleSprites; // 播放完畢後切換回待機狀態
         characterImage.sprite = currentActionSprites[0];
     }
 
-    // 更新動畫根據角色的當前狀態
-    public void UpdateAnimation(CharacterAction currentAction, float frameRate)
-    {
-        switch (currentAction)
-        {
-            case CharacterAction.IDLE:
-                PlayAnimation(idleSprites, frameRate);
-                break;
-            case CharacterAction.ATTACK:
-                PlayAnimation(attackSprites, frameRate);
-                break;
-            case CharacterAction.DEFENSE:
-                PlayAnimation(defendSprites, frameRate);
-                break;
-            default:
-                PlayAnimation(idleSprites, frameRate); // 默認閒置
-                break;
-        }
-    }
+
 }

@@ -68,9 +68,7 @@ public partial class BattleSceneUIManager : MonoBehaviour, IGameObserver
         List<Character> players = GameManager.instance.players;
         for (int i = 0; i < characterAnimators.Count; i++)
         {
-            //debug the players idel image
-            Debug.Log(players[i].idleSprites[0]);
-            characterAnimators[i].characterImage.sprite = players[i].idleSprites[0];
+            characterAnimators[i].LoadSprite(players[i]);
             characterAnimators[i].gameObject.SetActive(true);
         }
     }

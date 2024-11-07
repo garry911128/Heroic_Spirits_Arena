@@ -9,6 +9,7 @@ public class EndSceneController : MonoBehaviour
     void Start()
     {
         Debug.Log("EndScene Start");
+        UpdateWinnerUI();
     }
 
     public void UpdateWinnerUI()
