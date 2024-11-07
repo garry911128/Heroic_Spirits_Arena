@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public partial class BattleSceneUIManager : MonoBehaviour, IGameObserver
+public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 {
     private MapManager mapManager = new MapManager();
     public ActionPanel actionPanel;
@@ -78,6 +78,12 @@ public partial class BattleSceneUIManager : MonoBehaviour, IGameObserver
         vsImage.SetActive(true);
         yield return new WaitForSeconds(3);
         vsImage.SetActive(false);
+    }
+
+    public void PlayCharacterAnimation(int playerIndex, CharacterAction action)
+    {
+        StopAllCoroutines();  // 停止目前正在撥放的動畫
+        StartCoroutine(characterAnimators[playerIndex].PlayAnimationCoroutine(action));
     }
 
     void OnDestroy()
