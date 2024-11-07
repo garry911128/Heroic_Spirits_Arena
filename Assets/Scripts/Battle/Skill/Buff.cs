@@ -27,34 +27,42 @@ public class Buff
         isApplied = false;
     }
 
-    public void Apply(Character character)
+    public void Apply(Character user, Character target)
     {
         if (!isApplied)
         {
             isApplied = true;
-            character.buffs.Add(this);
             switch (effectType)
             {
                 case BuffType.DamageReduction:
-                    character.damageReduction += value;
+                    user.buffs.Add(this);
+                    user.damageReduction += value;
                     break;
                 case BuffType.CriticalChance:
-                    character.critChance += value;
+                    user.buffs.Add(this);
+                    user.critChance += value;
                     break;
                 case BuffType.ArmorPenetration:
-                    character.armorPenetration += value;
+                    user.buffs.Add(this);
+                    user.armorPenetration += value;
                     break;
                 case BuffType.MinorSkillBlock:
-                    character.minorSkillBlock = true;
+                    target.buffs.Add(this);
+                    target.minorSkillBlock = true;
                     break;
                 case BuffType.HpRefill:
-                    character.Heal(value);
+                    user.buffs.Add(this);
+                    user.Heal(value);
+                    break;
+                case BuffType.AttackBoost:
+                    user.buffs.Add(this);
+                    user.atk += value;
                     break;
             }
         }
     }
 
-    public void Remove(Character character)
+    public void Remove(Character owner)
     {
         if (isApplied)
         {
@@ -62,23 +70,25 @@ public class Buff
             switch (effectType)
             {
                 case BuffType.DamageReduction:
-                    character.damageReduction -= value;
+                    owner.damageReduction -= value;
                     break;
                 case BuffType.CriticalChance:
-                    character.critChance -= value;
+                    owner.critChance -= value;
                     break;
                 case BuffType.ArmorPenetration:
-                    character.armorPenetration -= value;
+                    owner.armorPenetration -= value;
                     break;
                 case BuffType.MinorSkillBlock:
-                    character.minorSkillBlock = false;
+                    owner.minorSkillBlock = false;
+                    break;
+                case BuffType.AttackBoost:
+                    owner.atk -= value;
                     break;
             }
-            Debug.Log($"{name}Buff從{character}消失了");
         }
     }
 
-    public void ReduceDuration(Character character)
+    public void ReduceDuration(Character owner)
     {
         if (duration > 0)
         {
@@ -86,7 +96,7 @@ public class Buff
         }
         if (IsExpired())
         {
-            Remove(character);
+            Remove(owner);
         }
     }
 

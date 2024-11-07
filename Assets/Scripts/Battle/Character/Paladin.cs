@@ -11,10 +11,10 @@ public class Paladin : Character
             // 小招: 下一回合減少受到的傷害 100%
             new MinorSkill(
                 name: "Defend",
-                description: "Reduce damage taken by 100% for 1 turn",
+                description: "Reduce damage taken by 100% for 2 turn",
                 cooldown: 3,
                 skillTypes: new List<SkillType> { SkillType.Buff },
-                buffs: new List<Buff> { new Buff("Damage Reduction", 1, BuffType.DamageReduction, 100) }
+                buffs: new List<Buff> { new Buff("Damage Reduction", 2, BuffType.DamageReduction, 100) }
             )
         },
         // 大招: 接下來兩回合防禦係數為100%(完全防禦)，並固定反擊15傷害

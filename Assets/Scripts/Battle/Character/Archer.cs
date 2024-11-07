@@ -11,10 +11,10 @@ public class Archer : Character
             // 小招: 對手下一回合無法使用招式
             new MinorSkill(
                 name: "Disable Opponent's Skill",
-                description: "Disable opponent's skill for 1 turn",
+                description: "Disable opponent's skill for 2 turn",
                 cooldown: 3,
                 skillTypes: new List<SkillType> { SkillType.Buff },
-                buffs: new List<Buff> { new Buff("Skill Block", 1, BuffType.MinorSkillBlock, 1) }
+                buffs: new List<Buff> { new Buff("Skill Block", 2, BuffType.MinorSkillBlock, 2) }
             )
         },
         // 大招: 給自己加上暴擊率50%的buff，持續2回合，並且多一回合行動

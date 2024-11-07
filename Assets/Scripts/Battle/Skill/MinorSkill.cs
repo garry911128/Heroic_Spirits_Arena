@@ -23,7 +23,7 @@ public class MinorSkill : Skill
                     case SkillType.Buff:
                         foreach (Buff buff in buffs)
                         {
-                            buff.Apply(user);
+                            buff.Apply(user, target);
                         }
                         break;
                 }

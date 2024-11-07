@@ -42,15 +42,19 @@ public class BattleManager : MonoBehaviour
         {
             case CharacterAction.ATTACK:
                 character.Attack(currentDefender);
+                GameManager.instance.NotifyObserverPlayAnimation(turn % 2, CharacterAction.ATTACK);
                 break;
             case CharacterAction.DEFENSE:
                 character.Defense();
+                GameManager.instance.NotifyObserverPlayAnimation(turn % 2, CharacterAction.DEFENSE);
                 break;
             case CharacterAction.USEMINORSKILL:
                 character.ActivateSkill(0, currentDefender);
+                GameManager.instance.NotifyObserverPlayAnimation(turn % 2, CharacterAction.ATTACK);
                 break;
             case CharacterAction.USEUlTIMATE:
                 character.ActivateUltimate(currentDefender);
+                GameManager.instance.NotifyObserverPlayAnimation(turn % 2, CharacterAction.ATTACK);
                 break;
             default:
                 break;
@@ -73,7 +77,7 @@ public class BattleManager : MonoBehaviour
             yield return new WaitUntil(() => actionPanel.IsActionSelected);
             CharacterAction action = actionPanel.GetSelectedAction();
             PerformAction(action, currentAttacker);
-            currentAttacker.update();
+            currentAttacker.Update();
             GameManager.instance.NotifyObserversPlayersState();
             turn++;
         }
@@ -87,6 +91,7 @@ public class BattleManager : MonoBehaviour
         {
             if (randomEvent.TryApplyEvent(character))
             {
+                GameManager.instance.NotifyObserverOnTriggerEvent(randomEvent, turn%2);
                 Debug.Log("Triggered event: " + randomEvent.name);
                 break;
             }
@@ -98,4 +103,6 @@ public class BattleManager : MonoBehaviour
         GameManager.instance.PlayerWins(winnerIndex);
         GameManager.instance.NotifyObserversPlayersWin();
     }
+
+
 }

@@ -1,16 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public class BattleSceneUIManager : MonoBehaviour, IGameObserver
+public partial class BattleSceneUIManager : MonoBehaviour, IGameObserver
 {
     private MapManager mapManager = new MapManager();
     public ActionPanel actionPanel;
     public GameObject battleScreen;
     public GameObject vsImage; // "VS" UI component
     public Text scoreBoard; // the wins of each player
-    public List<Image> playersImage;
+    public Text HintText; // the hint text
+    public List<CharacterAnimator> characterAnimators; // displays character sprites
     public List<Image> hpBars; // the hp bars of each player
     public Image mapBackgroundImage; // the background of map
 
@@ -39,26 +41,37 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 
     public void OnTurnStart(Character player, int playerNumber)
     {
-        //Debug.Log("Battle Scene subScriber OnPlayerTurn");
         actionPanel.ShowActionPanel(player, playerNumber);
+        PlayCharacterAnimation(playerNumber, CharacterAction.IDLE);
     }
 
     public void OnPlayerWin(List<int> playerWins)
     {
-        Debug.Log("Battle Scene subScriber OnPlayerWin");
         scoreBoard.gameObject.SetActive(true);
-        scoreBoard.text = "Player A:" + playerWins[0] + ",Player B:" + playerWins[1];
-        Debug.Log("score board in update" + scoreBoard.text);
+        scoreBoard.text = $"Player 1: {playerWins[0]}, Player 2: {playerWins[1]}";
+    }
+
+    public void OnTriggerEvent(RandomEvent randomEvent, int playerNumber)
+    {
+        _ = OnTriggerEventAsync(randomEvent, playerNumber);
+    }
+
+    public async Task OnTriggerEventAsync(RandomEvent randomEvent, int playerNumber)
+    {
+        HintText.text = $"Player {playerNumber + 1} triggered {randomEvent.description}";
+        await Task.Delay(2000);
+        HintText.text = string.Empty;
     }
 
     private void DisplayPlayersCharacterImages()
     {
-        List<Character> players = new List<Character> { GameManager.instance.players[0], GameManager.instance.players[1] };
-
-        for (int i = 0;i < playersImage.Count; i++)
+        List<Character> players = GameManager.instance.players;
+        for (int i = 0; i < characterAnimators.Count; i++)
         {
-            playersImage[i].sprite = players[i].sprite;
-            playersImage[i].gameObject.SetActive(true);
+            //debug the players idel image
+            Debug.Log(players[i].idleSprites[0]);
+            characterAnimators[i].characterImage.sprite = players[i].idleSprites[0];
+            characterAnimators[i].gameObject.SetActive(true);
         }
     }
 
@@ -73,5 +86,4 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
     {
         GameManager.instance.RemoveObserver(this);
     }
-
 }

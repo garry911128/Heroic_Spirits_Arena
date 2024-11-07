@@ -1,62 +1,61 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterAnimator : MonoBehaviour
 {
-    public Sprite[] attackSprites; // Array to hold attack animation sprites
-    public Sprite[] defenseSprites; // Array to hold defense animation sprites
-    private SpriteRenderer spriteRenderer; // Reference to the SpriteRenderer component
+    public Image characterImage; // 用來顯示角色圖片的 Image 元件
+    public Sprite[] idleSprites; // 閒置狀態的圖片序列
+    public Sprite[] attackSprites; // 攻擊狀態的圖片序列
+    public Sprite[] defendSprites; // 防禦狀態的圖片序列
 
-    private void Start()
+    private Sprite[] currentActionSprites; // 當前狀態的圖片序列
+    private int currentFrame = 0; // 當前幀
+    private bool isAnimating = false; // 是否正在播放動畫
+
+    // 播放動畫
+    public void PlayAnimation(Sprite[] sprites, float frameRate)
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
+        if (isAnimating)
+            return; // 如果已經在播放動畫，則不再播放
+
+        isAnimating = true;
+        currentActionSprites = sprites;
+        currentFrame = 0;
+        StartCoroutine(PlayAnimationCoroutine(frameRate));
+    }
+
+    private IEnumerator PlayAnimationCoroutine(float frameRate)
+    {
+        while (currentFrame < currentActionSprites.Length)
         {
-            Debug.LogError("SpriteRenderer component not found on this GameObject.");
-        }
-    }
-
-    // Method to load the sprites from resources
-    public void LoadAnimationSprites(CharacterType characterType)
-    {
-        // Load attack sprites
-        attackSprites = Resources.LoadAll<Sprite>($"Characters/{characterType}/Attack");
-        // Load defense sprites
-        defenseSprites = Resources.LoadAll<Sprite>($"Characters/Defense");
-    }
-
-    // Method to play the attack animation
-    public void PlayAttackAnimation(float animationSpeed = 0.1f)
-    {
-        StartCoroutine(PlayAnimation(attackSprites, animationSpeed));
-    }
-
-    // Method to play the defense animation
-    public void PlayDefenseAnimation(float animationSpeed = 0.1f)
-    {
-        StartCoroutine(PlayAnimation(defenseSprites, animationSpeed));
-    }
-
-    // Coroutine to play the animation
-    private IEnumerator PlayAnimation(Sprite[] animationSprites, float animationSpeed)
-    {
-        if (animationSprites == null || animationSprites.Length == 0)
-        {
-            Debug.LogWarning("No sprites found for animation.");
-            yield break; // Exit if there are no sprites to animate
+            characterImage.sprite = currentActionSprites[currentFrame];
+            currentFrame++;
+            yield return new WaitForSeconds(frameRate); // 根據幀率等待
         }
 
-        for (int i = 0; i < animationSprites.Length; i++)
-        {
-            spriteRenderer.sprite = animationSprites[i]; // Set the current sprite
-            yield return new WaitForSeconds(animationSpeed); // Wait for the specified duration
-        }
+        isAnimating = false; // 動畫播放結束
+        currentActionSprites = idleSprites;
+        characterImage.sprite = currentActionSprites[0];
+    }
 
-        // Optionally, reset to the idle state or a default sprite after the animation
-        // spriteRenderer.sprite = idleSprite; // You may need to set an idle sprite here
+    // 更新動畫根據角色的當前狀態
+    public void UpdateAnimation(CharacterAction currentAction, float frameRate)
+    {
+        switch (currentAction)
+        {
+            case CharacterAction.IDLE:
+                PlayAnimation(idleSprites, frameRate);
+                break;
+            case CharacterAction.ATTACK:
+                PlayAnimation(attackSprites, frameRate);
+                break;
+            case CharacterAction.DEFENSE:
+                PlayAnimation(defendSprites, frameRate);
+                break;
+            default:
+                PlayAnimation(idleSprites, frameRate); // 默認閒置
+                break;
+        }
     }
 }
-

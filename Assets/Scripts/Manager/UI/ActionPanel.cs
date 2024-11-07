@@ -27,10 +27,30 @@ public class ActionPanel : MonoBehaviour
         UpdateButtonSelection();
     }
 
+    private void EnableActionButton(Character player)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if(i == 0 || i == 1)
+            {
+                buttons[i].interactable = true;
+            }
+            else if(i == 2)
+            {
+                buttons[i].interactable = player.CanUseSkill(0, CharacterAction.USEMINORSKILL);
+            }
+            else
+            {
+                buttons[i].interactable = player.CanUseSkill(0, CharacterAction.USEUlTIMATE);
+            }
+        }
+    }
+
     public void ShowActionPanel(Character player, int playerNumber)
     {
         isActionSelected = false;
         actionPanel.SetActive(true);
+        EnableActionButton(player);
         turnHintText.text = $"Player {playerNumber+1}'s turn";
         descriptionString = player.GetDescriptions();
         UpdateButtonSelection();
@@ -51,6 +71,13 @@ public class ActionPanel : MonoBehaviour
 
     private void SelectAction(Button button)
     {
+        // 檢查按鈕是否可用
+        if (!button.interactable)
+        {
+            return; // 按鈕不可用，直接返回不執行任何操作
+        }
+
+        // 設定選擇的動作
         if (button == buttons[0])
         {
             selectedAction = CharacterAction.ATTACK;
@@ -59,18 +86,19 @@ public class ActionPanel : MonoBehaviour
         {
             selectedAction = CharacterAction.DEFENSE;
         }
-        else if(button == buttons[2])
+        else if (button == buttons[2])
         {
-            selectedAction= CharacterAction.USEMINORSKILL;
+            selectedAction = CharacterAction.USEMINORSKILL;
         }
         else if (button == buttons[3])
         {
-            selectedAction= CharacterAction.USEUlTIMATE;
+            selectedAction = CharacterAction.USEUlTIMATE;
         }
 
         isActionSelected = true;
         HideActionPanel();
     }
+
 
     void Update()
     {

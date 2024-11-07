@@ -38,14 +38,23 @@ public class DebugUIManager : MonoBehaviour, IGameObserver
         UpdatePlayerStatsUI(players);
     }
 
+    public void OnTriggerEvent(RandomEvent randomEvent, int playerNumber)
+    {
+
+    }
+
+    public void PlayCharacterAnimation(int playerIndex, CharacterAction action)
+    {
+    }
+
     private void UpdatePlayerStatsUI(List<Character> players)
     {
         this.players = players;
         if (players.Count > 0)
         {
             debugInfoText.text = "Debug：\n" +
-                                  "玩家 A HP: " + (GameManager.instance.players[0] != null ? GameManager.instance.players[0].hp.ToString() : "角色未創建") + "\n" +
-                                  "玩家 B HP: " + (GameManager.instance.players.Count > 1 && GameManager.instance.players[1] != null ? GameManager.instance.players[1].hp.ToString() : "角色未創建") + "\n" +
+                                  "玩家 1 HP: " + (GameManager.instance.players[0] != null ? GameManager.instance.players[0].hp.ToString() : "角色未創建") + "\n" +
+                                  "玩家 2 HP: " + (GameManager.instance.players.Count > 1 && GameManager.instance.players[1] != null ? GameManager.instance.players[1].hp.ToString() : "角色未創建") + "\n" +
                                   "當前比分: " + wins[0] + " - " + wins[1];
         }
         else

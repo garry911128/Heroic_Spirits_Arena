@@ -7,4 +7,6 @@ public interface IGameObserver
     void OnPlayerWin(List<int> playerWins);
     void OnPlayerStatsChanged(List<Character> players);
     void OnTurnStart(Character player, int playerNumber);
+    void OnTriggerEvent(RandomEvent randomEvent, int playerNumber);
+    void PlayCharacterAnimation(int playerNumber, CharacterAction action);
 }

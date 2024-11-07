@@ -7,9 +7,9 @@ using System.Collections;
 using Unity.VisualScripting;
 
 public enum CharacterType { Saber, Archer, Paladin};
-public enum CharacterAction { IDEL, ATTACK, DEFENSE, USEMINORSKILL, USEUlTIMATE, DEAD}
+public enum CharacterAction { IDLE, ATTACK, DEFENSE, USEMINORSKILL, USEUlTIMATE, DEAD }
 
-public abstract class Character
+public abstract partial class Character
 {
     public string name { get; set; }
     public int maxHp { get; set; }
@@ -23,11 +23,14 @@ public abstract class Character
     public double damageReduction { get; set; }
     public bool minorSkillBlock { get; set; }
     public bool isStunned { get; set; }
-    public List<Buff> buffs; //buff list, which is used to store the buff that the character has or is affected by
+    public List<Buff> buffs;
     public List<Skill> skills;
     public Ultimate ultimate;
-    public Sprite sprite;
-    public Animator animator;
+    public Sprite[] idleSprites;
+    public Sprite[] attackSprites;
+    public Sprite[] defendSprites;
+    public CharacterAction currentAction = CharacterAction.IDLE; // 當前角色狀態
+
     public Character(string name, int hp, int atk, List<Skill> skills, Ultimate ultimate)
     {
         this.name = name;
@@ -40,12 +43,30 @@ public abstract class Character
         this.skills = skills;
         this.ultimate = ultimate;
         isStunned = false;
+        defense = 0;
+        armorPenetration = 0;
+        critChance = 0;
+        damageReduction = 0;
+        minorSkillBlock = false;
     }
 
     public void Attack(Character target)
     {
-        target.TakeDamage(atk);
+        bool isCriticalHit = UnityEngine.Random.value < critChance;
+        double baseDamage = atk;
+        if (isCriticalHit)
+        {
+            baseDamage *= 1.5;
+            Debug.Log($"{name} 進行了暴擊！");
+        }
+        double effectiveDefense = Mathf.Max(0, (float)target.defense - (float)armorPenetration);
+        double damageMultiplier = 1 - effectiveDefense;
+        double effectiveDamage = baseDamage * damageMultiplier * (1 - target.damageReduction);
+        int finalDamage = Mathf.Max(1, (int)Mathf.Round((float)effectiveDamage));
+        Debug.Log($"{name} 對 {target.name} 發出了 {finalDamage} 點傷害（暴擊: {isCriticalHit}），{target.name} 現在的 HP: {target.hp}/{target.maxHp}");
+        target.TakeDamage(finalDamage);
     }
+
 
     public void Defense()
     {
@@ -61,13 +82,13 @@ public abstract class Character
         }
         effectiveDamage *= (1 - damageReduction);
         effectiveDamage *= (1 - defense);
-        int finalDamage = Mathf.Max(1, (int)Math.Round(effectiveDamage));
+        int finalDamage = Mathf.Max(1, (int)Mathf.Round((float)effectiveDamage));
         hp -= finalDamage;
         if (hp < 0)
         {
             hp = 0;
         }
-        Debug.Log($"{name} 受到了 {finalDamage} 點傷害，目前 HP: {hp}/{maxHp}");
+        Debug.Log($"{name} 受到了 {finalDamage} 點傷害(防禦:{defendTurnsCount > 0})，目前 HP: {hp}/{maxHp}");
     }
 
     public void Heal(int value)
@@ -79,64 +100,14 @@ public abstract class Character
         }
     }
 
-    public void ActivateSkill(int skillIndex, Character target)
-    {
-        skills[skillIndex].Activate(this, target);
-    }
-    public void ActivateUltimate(Character target)
-    {
-        ultimate.Activate(this, target);
-    }
-
-    public List<string> GetDescriptions()
-    {
-        List<string> desciptions = new List<string>();
-        desciptions.Add(GetActionDescription(CharacterAction.ATTACK));
-        desciptions.Add(GetActionDescription(CharacterAction.DEFENSE));
-        desciptions.Add(GetActionDescription(CharacterAction.USEMINORSKILL));
-        desciptions.Add(GetActionDescription(CharacterAction.USEUlTIMATE));
-        return desciptions;
-    }
-
-    public string GetActionDescription(CharacterAction action)
-    {
-        string description;
-        switch (action)
-        {
-            case CharacterAction.ATTACK:
-                description = $"Attack: {atk}";
-                break;
-
-            case CharacterAction.DEFENSE:
-                description = "Defense: Reduces damage taken by 50% for 2 turns.(include this turn)";
-                break;
-
-            case CharacterAction.USEMINORSKILL:
-                description = "Minor Skills:\n";
-                foreach (Skill skill in skills)
-                {
-                    description += $"{skill.name}: {skill.description}\n";
-                }
-                break;
-
-            case CharacterAction.USEUlTIMATE:
-                description = $"ultpoint:{ultimatePoints}, cost:{ultimate.ultimateCost}\nUltimate:\n{ultimate.name}: {ultimate.description}";
-                break;
-
-            default:
-                description = "Idle";
-                break;
-        }
-        return description;
-    }
-
-    public void update()
+    public void Update()
     {
         defendTurnsCount--;
-        ultimatePoints ++;
+        ultimatePoints++;
         foreach (Buff buff in buffs)
         {
             buff.ReduceDuration(this);
         }
     }
 }
+

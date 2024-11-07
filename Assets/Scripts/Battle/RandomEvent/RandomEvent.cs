@@ -9,14 +9,16 @@ public class RandomEvent
     public int value;
     public int duration;
     public float probability; // 機率屬性
+    public string description;
 
-    public RandomEvent(string name, BuffType effectType, int value, int duration, float probability)
+    public RandomEvent(string name, BuffType effectType, int value, int duration, float probability, string description)
     {
         this.name = name;
         this.effectType = effectType;
         this.value = value;
         this.duration = duration;
         this.probability = probability; // 設定機率
+        this.description = description;
     }
 
     public bool TryApplyEvent(Character character)
@@ -36,7 +38,7 @@ public class RandomEvent
     public void ApplyEvent(Character character)
     {
         Buff newBuff = new Buff(name, duration, effectType, value);
-        newBuff.Apply(character);
+        newBuff.Apply(character, character);
         character.buffs.Add(newBuff); // 加入角色的buff列表
     }
 
@@ -72,8 +74,8 @@ public class RandomEvent
                     int value = int.Parse(values[2]);
                     int duration = int.Parse(values[3]);
                     float probability = float.Parse(values[4]); // 讀取機率
-
-                    RandomEvent randomEvent = new RandomEvent(name, effectType, value, duration, probability);
+                    string description = values[5];
+                    RandomEvent randomEvent = new RandomEvent(name, effectType, value, duration, probability, description);
                     events.Add(randomEvent);
                 }
             }

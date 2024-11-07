@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public partial class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public BattleManager battleManager;
@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     public List<int> playersWins = new List<int> { 0, 0 };
     private int maxWins = 2; // 三戰兩勝
     private int currentMatch = 0;
-    private List<IGameObserver> gameObservers = new List<IGameObserver>();
 
     void Awake()
     {
@@ -104,45 +103,5 @@ public class GameManager : MonoBehaviour
             StartNewMatch();
         }
     }
-
-    public void AddObserver(IGameObserver observer)
-    {
-        if (!gameObservers.Contains(observer))
-        {
-            gameObservers.Add(observer);
-        }
-    }
-
-    public void RemoveObserver(IGameObserver observer)
-    {
-        if (gameObservers.Contains(observer))
-        {
-            gameObservers.Remove(observer);
-        }
-    }
-
-    public void NotifyObserversPlayersState()
-    {
-        foreach (IGameObserver observer in gameObservers)
-        {
-            observer.OnPlayerStatsChanged(players);
-        }
-    }
-
-    public void NotifyObserversPlayersWin()
-    {
-        foreach (IGameObserver observer in gameObservers)
-        {
-            observer.OnPlayerWin(playersWins);
-        }
-    }
-
-    public void NotifyObserverOnTurnStart(int playerNumber)
-    {
-        foreach (IGameObserver observer in gameObservers)
-        {
-            observer.OnTurnStart(players[playerNumber], playerNumber);
-        }
-    }
-
+    
 }
