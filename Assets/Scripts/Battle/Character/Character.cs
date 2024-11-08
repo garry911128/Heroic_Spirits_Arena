@@ -104,7 +104,6 @@ public abstract partial class Character
 
     public void Update()
     {
-        currentAction = CharacterAction.IDLE;
         defendTurnsCount--;
         ultimatePoints++;
         foreach (Buff buff in buffs)
