@@ -52,16 +52,20 @@ public class DebugUIManager : MonoBehaviour, IGameObserver
         this.players = players;
         if (players.Count > 0)
         {
+            string player1Action = GameManager.instance.players[0] != null ? players[0].currentAction.ToString() : "無動作";
             debugInfoText.text = "Debug：\n" +
-                                  "玩家 1 HP: " + (GameManager.instance.players[0] != null ? GameManager.instance.players[0].hp.ToString() : "角色未創建") + "\n" +
-                                  "玩家 2 HP: " + (GameManager.instance.players.Count > 1 && GameManager.instance.players[1] != null ? GameManager.instance.players[1].hp.ToString() : "角色未創建") + "\n" +
-                                  "當前比分: " + wins[0] + " - " + wins[1];
+                                 "玩家 1 HP: " + (GameManager.instance.players[0] != null ? GameManager.instance.players[0].hp.ToString() : "角色未創建") +
+                                 "當前動作: " + player1Action + "\n" +
+                                 "玩家 2 HP: " + (GameManager.instance.players.Count > 1 && GameManager.instance.players[1] != null ? GameManager.instance.players[1].hp.ToString() : "角色未創建") +
+                                 "當前動作: " + (GameManager.instance.players.Count > 1 && GameManager.instance.players[1] != null ? players[1].currentAction.ToString() : "無動作") + "\n" +
+                                 "當前比分: " + wins[0] + " - " + wins[1];
         }
         else
         {
             debugInfoText.text = "Debug：\n角色未創建";
         }
     }
+
 
     public void OnPlayerWin(List<int> playerWins)
     {

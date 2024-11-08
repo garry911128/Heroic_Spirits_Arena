@@ -18,11 +18,13 @@ public abstract partial class Character
 
     public void ActivateSkill(int skillIndex, Character target)
     {
+        currentAction = CharacterAction.USEMINORSKILL;
         skills[skillIndex].Activate(this, target);
     }
 
     public void ActivateUltimate(Character target)
     {
+        currentAction = CharacterAction.USEUlTIMATE;
         ultimate.Activate(this, target);
     }
 

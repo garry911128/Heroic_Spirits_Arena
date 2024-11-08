@@ -64,12 +64,14 @@ public abstract partial class Character
         double effectiveDamage = baseDamage * damageMultiplier * (1 - target.damageReduction);
         int finalDamage = Mathf.Max(1, (int)Mathf.Round((float)effectiveDamage));
         Debug.Log($"{name} 對 {target.name} 發出了 {finalDamage} 點傷害（暴擊: {isCriticalHit}），{target.name} 現在的 HP: {target.hp}/{target.maxHp}");
+        currentAction = CharacterAction.ATTACK;
         target.TakeDamage(finalDamage);
     }
 
 
     public void Defense()
     {
+        currentAction = CharacterAction.DEFENSE;
         defendTurnsCount = 2;
     }
 
@@ -102,6 +104,7 @@ public abstract partial class Character
 
     public void Update()
     {
+        currentAction = CharacterAction.IDLE;
         defendTurnsCount--;
         ultimatePoints++;
         foreach (Buff buff in buffs)
