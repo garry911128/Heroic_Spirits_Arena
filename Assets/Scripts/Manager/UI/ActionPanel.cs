@@ -47,12 +47,12 @@ public class ActionPanel : MonoBehaviour
         }
     }
 
-    public void ShowActionPanel(Character player, int playerNumber)
+    public void ShowActionPanel(Character player, int playerNumber, int currentTurn)
     {
         isActionSelected = false;
         actionPanel.SetActive(true);
         EnableActionButton(player);
-        turnHintText.text = $"Player {playerNumber+1}'s turn";
+        turnHintText.text = $"Turn {currentTurn+1} Player{playerNumber+1}'s Turn"; //Turn 10, Player1's Turn
         descriptionString = player.GetDescriptions();
         UpdateButtonSelection();
     }

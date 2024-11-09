@@ -10,6 +10,7 @@ public class BattleManager : MonoBehaviour
     private Character currentAttacker;
     private Character currentDefender;
     private int turn;
+    private int maxTurns = 10;
     ActionPanel actionPanel;
 
     private void Start()
@@ -65,7 +66,7 @@ public class BattleManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         GameManager.instance.NotifyObserversPlayersWin();
-        while (players[0].hp > 0 && players[1].hp > 0)
+        while (players[0].hp > 0 && players[1].hp > 0 && turn < maxTurns)
         {
             currentAttacker = players[turn % 2];
             currentDefender = players[(turn + 1) % 2];
@@ -73,7 +74,7 @@ public class BattleManager : MonoBehaviour
             TriggerRandomEvent(currentAttacker);
             yield return new WaitForSeconds(1f);
 
-            GameManager.instance.NotifyObserverOnTurnStart(turn%2);
+            GameManager.instance.NotifyObserverOnTurnStart(turn%2, turn);
             yield return new WaitUntil(() => actionPanel.IsActionSelected);
             CharacterAction action = actionPanel.GetSelectedAction();
             PerformAction(action, currentAttacker);
@@ -81,8 +82,15 @@ public class BattleManager : MonoBehaviour
             GameManager.instance.NotifyObserversPlayersState();
             turn++;
         }
-        if (players[0].hp <= 0) PlayerWins(1);
-        if (players[1].hp <= 0) PlayerWins(0);
+        if (turn == maxTurns)
+        {
+            GameManager.instance.MatchDraw();
+        }
+        else
+        {
+            if (players[0].hp <= 0) PlayerWins(1);
+            if (players[1].hp <= 0) PlayerWins(0);
+        }
     }
 
     public void TriggerRandomEvent(Character character)

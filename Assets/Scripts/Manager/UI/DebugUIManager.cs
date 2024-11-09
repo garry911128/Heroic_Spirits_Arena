@@ -72,7 +72,7 @@ public class DebugUIManager : MonoBehaviour, IGameObserver
         wins = playerWins;
     }
 
-    public void OnTurnStart(Character player, int playerNumber)
+    public void OnTurnStart(Character player, int playerNumber, int currentTurn)
     {
     }
 

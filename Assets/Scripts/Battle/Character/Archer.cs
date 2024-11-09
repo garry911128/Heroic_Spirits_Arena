@@ -5,7 +5,7 @@ public class Archer : Character
     public Archer() : base(
         "Archer",
         100,   // Base HP
-        20,    // Base ATK
+        30,    // Base ATK
         new List<Skill>
         {
             // 小招: 對手下一回合無法使用招式

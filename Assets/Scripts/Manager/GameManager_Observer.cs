@@ -39,11 +39,11 @@ public partial class GameManager
         }
     }
 
-    public void NotifyObserverOnTurnStart(int playerNumber)
+    public void NotifyObserverOnTurnStart(int playerNumber, int currentTurn)
     {
         foreach (IGameObserver observer in gameObservers)
         {
-            observer.OnTurnStart(players[playerNumber], playerNumber);
+            observer.OnTurnStart(players[playerNumber], playerNumber, currentTurn);
         }
     }
 

@@ -5,7 +5,7 @@ public class Paladin : Character
     public Paladin() : base(
         "Paladin",
         130,   // Base HP
-        15,    // Base ATK
+        20,    // Base ATK
         new List<Skill>
         {
             // 小招: 下一回合減少受到的傷害 100%

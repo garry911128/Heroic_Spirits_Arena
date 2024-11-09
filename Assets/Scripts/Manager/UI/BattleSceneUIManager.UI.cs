@@ -17,9 +17,11 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
     public List<CharacterAnimator> characterAnimators; // displays character sprites
     public List<Image> hpBars; // the hp bars of each player
     public Image mapBackgroundImage; // the background of map
+    public Image turnOwnerHint; // the hint of turn owner
 
     void Start()
     {
+        turnOwnerHint.gameObject.SetActive(false);
         GameManager.instance.AddObserver(this);
         scoreBoard.gameObject.SetActive(true);
         randomEventBoard.gameObject.SetActive(false);
@@ -42,9 +44,12 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
         }
     }
 
-    public void OnTurnStart(Character player, int playerNumber)
+    public void OnTurnStart(Character player, int playerNumber, int currentTurn)
     {
-        actionPanel.ShowActionPanel(player, playerNumber);
+        turnOwnerHint.gameObject.SetActive(true);
+        Vector3 hpBarCenter = (hpBars[playerNumber].transform.position);
+        turnOwnerHint.transform.position = new Vector3(hpBarCenter.x, hpBarCenter.y + 150, hpBarCenter.z);
+        actionPanel.ShowActionPanel(player, playerNumber, currentTurn);
         PlayCharacterAnimation(playerNumber, CharacterAction.IDLE);
     }
 

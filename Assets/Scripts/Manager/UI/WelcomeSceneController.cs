@@ -13,8 +13,7 @@ public class WelcomeSceneController : MonoBehaviour
 
     void Update()
     {
-        // ÀË¬d·Æ¹«¥ªÁäÂIÀ»
-        if (Input.GetMouseButtonDown(0) || (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Tab)))
+        if (  !Input.GetMouseButton(0) && (Input.anyKeyDown && !Input.GetKeyDown(KeyCode.Tab)) )
         {
             Debug.Log("mouse click on welcome scene");
             GameManager.instance.StartNewMatch();

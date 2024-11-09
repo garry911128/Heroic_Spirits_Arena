@@ -84,6 +84,14 @@ public partial class GameManager : MonoBehaviour
         }
     }
 
+    public void MatchDraw()
+    {
+        Debug.Log("Match ended in a draw!");
+        NotifyObserversPlayersState();
+        NotifyObserversPlayersWin();
+        StartNewMatch();
+    }
+
     public void PlayerWins(int index) // 0: playerA, 1: playerB
     {
         playersWins[index]++;
