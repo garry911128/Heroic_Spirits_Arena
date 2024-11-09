@@ -10,8 +10,10 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
     public ActionPanel actionPanel;
     public GameObject battleScreen;
     public GameObject vsImage; // "VS" UI component
-    public Text scoreBoard; // the wins of each player
-    public Text HintText; // the hint text
+    public Image scoreBoard; // the wins of each player
+    public Text scoreBoardText; // the wins of each player
+    public Image randomEventBoard; // the random event board
+    public Text randomEventText; // the hint text
     public List<CharacterAnimator> characterAnimators; // displays character sprites
     public List<Image> hpBars; // the hp bars of each player
     public Image mapBackgroundImage; // the background of map
@@ -20,6 +22,7 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
     {
         GameManager.instance.AddObserver(this);
         scoreBoard.gameObject.SetActive(true);
+        randomEventBoard.gameObject.SetActive(false);
         mapManager.LoadMapSprites();
         mapBackgroundImage.sprite = mapManager.SelectRandomMap();
         StartCoroutine(ShowVSImageCoroutine());
@@ -47,8 +50,8 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 
     public void OnPlayerWin(List<int> playerWins)
     {
-        scoreBoard.gameObject.SetActive(true);
-        scoreBoard.text = $"Player 1: {playerWins[0]}, Player 2: {playerWins[1]}";
+        scoreBoardText.gameObject.SetActive(true);
+        scoreBoardText.text = $"{playerWins[0]}:{playerWins[1]}";
     }
 
     public void OnTriggerEvent(RandomEvent randomEvent, int playerNumber)
@@ -58,9 +61,11 @@ public class BattleSceneUIManager : MonoBehaviour, IGameObserver
 
     public async Task OnTriggerEventAsync(RandomEvent randomEvent, int playerNumber)
     {
-        HintText.text = $"Player {playerNumber + 1} triggered {randomEvent.description}";
-        await Task.Delay(2000);
-        HintText.text = string.Empty;
+        randomEventBoard.gameObject.SetActive(true);
+        randomEventText.text = $"Player {playerNumber + 1} triggered {randomEvent.description}";
+        await Task.Delay(3000);
+        randomEventText.text = string.Empty;
+        randomEventBoard.gameObject.SetActive(false);
     }
 
     private void DisplayPlayersCharacterImages()

@@ -7,6 +7,7 @@ public class ActionPanel : MonoBehaviour
 {
     public GameObject actionPanel;
     public Button[] buttons;
+    public Image selector;
     public Text descriptionText;
     public Text turnHintText;
     private int selectedIndex = 0;
@@ -128,15 +129,10 @@ public class ActionPanel : MonoBehaviour
         {
             ColorBlock colors = buttons[i].colors;
             if (i == selectedIndex) 
-            { 
-                colors.normalColor = Color.yellow;
+            {
+                selector.rectTransform.anchoredPosition = buttons[i].GetComponent<RectTransform>().anchoredPosition;
                 descriptionText.text = descriptionString[i];
             }
-            else
-            {
-                colors.normalColor = Color.white;
-            }
-            buttons[i].colors = colors;
         }
     }
 }
