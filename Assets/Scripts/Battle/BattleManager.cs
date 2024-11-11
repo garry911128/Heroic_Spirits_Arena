@@ -20,7 +20,7 @@ public class BattleManager : MonoBehaviour
 
     public void LoadRandomEvent()
     {
-        randomEvents = RandomEvent.LoadEventsFromCSV("Assets/Resources/Scene/BattleScene/RandomEvents/RandomEvent.csv");
+        randomEvents = RandomEvent.LoadEventsFromCSV("Scene/BattleScene/RandomEvents/RandomEvent");
     }
 
     public void StartBattle(List<Character> assignedPlayers)

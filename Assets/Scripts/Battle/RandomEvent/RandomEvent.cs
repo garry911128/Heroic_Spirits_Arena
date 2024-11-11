@@ -42,49 +42,54 @@ public class RandomEvent
         character.buffs.Add(newBuff); // 加入角色的buff列表
     }
 
-    public static List<RandomEvent> LoadEventsFromCSV(string filePath)
+    public static List<RandomEvent> LoadEventsFromCSV(string fileName)
     {
         List<RandomEvent> events = new List<RandomEvent>();
 
         try
         {
-            using (StreamReader reader = new StreamReader(filePath))
+            TextAsset csvFile = Resources.Load<TextAsset>(fileName);
+            if (csvFile == null)
             {
-                bool isFirstLine = true;
-                while (!reader.EndOfStream)
+                Debug.LogError("CSV file load error, file maybe not in resource folder");
+                return events;
+            }
+
+            string[] lines = csvFile.text.Split('\n');
+            bool isFirstLine = true;
+
+            foreach (string line in lines)
+            {
+                if (isFirstLine)
                 {
-                    string line = reader.ReadLine();
-                    //Debug.Log("Loading Event line: " + line);
-                    if (isFirstLine)
-                    {
-                        isFirstLine = false;
-                        continue; // 跳過標題行
-                    }
-
-                    string[] values = line.Split(',');
-                    if (values.Length < 5) // 檢查是否有足夠的列
-                    {
-                        //Debug.Log("Invalid data format in CSV.");
-                        continue;
-                    }
-
-                    string name = values[0];
-                    //Debug.Log("Loading Event name: " + name);
-                    BuffType effectType = (BuffType)System.Enum.Parse(typeof(BuffType), values[1]);
-                    int value = int.Parse(values[2]);
-                    int duration = int.Parse(values[3]);
-                    float probability = float.Parse(values[4]); // 讀取機率
-                    string description = values[5];
-                    RandomEvent randomEvent = new RandomEvent(name, effectType, value, duration, probability, description);
-                    events.Add(randomEvent);
+                    isFirstLine = false;
+                    continue;
                 }
+
+                string[] values = line.Split(',');
+                if (values.Length < 5)
+                {
+                    Debug.LogWarning("CSV data format error, this line will be skip" + line);
+                    continue;
+                }
+
+                string name = values[0];
+                BuffType effectType = (BuffType)System.Enum.Parse(typeof(BuffType), values[1]);
+                int value = int.Parse(values[2]);
+                int duration = int.Parse(values[3]);
+                float probability = float.Parse(values[4]);
+                string description = values.Length > 5 ? values[5] : "";
+
+                RandomEvent randomEvent = new RandomEvent(name, effectType, value, duration, probability, description);
+                events.Add(randomEvent);
             }
         }
         catch (System.Exception e)
         {
-            Debug.Log("Failed to load events from CSV: " + e.Message);
+            Debug.LogError("error when load csv file " + e.Message);
         }
 
         return events;
     }
+
 }

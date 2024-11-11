@@ -47,6 +47,4 @@ public class CharacterAnimator : MonoBehaviour
         currentActionSprites = idleSprites; // 播放完畢後切換回待機狀態
         characterImage.sprite = currentActionSprites[0];
     }
-
-
 }
